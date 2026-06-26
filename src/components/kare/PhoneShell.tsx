@@ -8,13 +8,14 @@ interface PhoneShellProps {
   bg?: string;
 }
 
-const tabs = [
+type Tab = { to: string; label: string; icon: typeof Home; isSos?: boolean };
+const tabs: Tab[] = [
   { to: "/home", label: "Home", icon: Home },
   { to: "/appointments", label: "Appointments", icon: Calendar },
   { to: "/sos", label: "SOS", icon: Siren, isSos: true },
   { to: "/records", label: "Records", icon: FileText },
   { to: "/more", label: "More", icon: Menu },
-] as const;
+];
 
 export function PhoneShell({ children, hideNav, bg }: PhoneShellProps) {
   const path = useRouterState({ select: (s) => s.location.pathname });
