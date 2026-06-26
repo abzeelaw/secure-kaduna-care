@@ -41,7 +41,7 @@ export function PhoneShell({ children, hideNav, bg }: PhoneShellProps) {
                 if (t.isSos) {
                   return (
                     <li key={t.to} className="-mt-7">
-                      <Link to={t.to} className="flex flex-col items-center gap-1">
+                      <Link to={t.to as never} className="flex flex-col items-center gap-1">
                         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emergency text-emergency-foreground shadow-lg shadow-emergency/40 ring-4 ring-background">
                           <Icon className="h-6 w-6" />
                         </span>
@@ -52,7 +52,7 @@ export function PhoneShell({ children, hideNav, bg }: PhoneShellProps) {
                 }
                 return (
                   <li key={t.to}>
-                    <Link to={t.to} className={`flex flex-col items-center gap-1 px-3 py-1 text-[11px] font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
+                    <Link to={t.to as never} className={`flex flex-col items-center gap-1 px-3 py-1 text-[11px] font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
                       <Icon className="h-5 w-5" />
                       <span>{t.label}</span>
                     </Link>
