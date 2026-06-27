@@ -33,7 +33,7 @@ function ProfilePage() {
 
   const save = useMutation({
     mutationFn: async (patch: Record<string, string>) => {
-      const { error } = await supabase.from("profiles").update(patch).eq("id", user!.id);
+      const { error } = await supabase.from("profiles").update(patch as never).eq("id", user!.id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Saved"); setEditing(null); qc.invalidateQueries({ queryKey: ["profile"] }); },
@@ -141,10 +141,10 @@ function ProfilePage() {
   );
 }
 
-function Field({ label, value, onChange, ...rest }: { label: string; value: string; onChange: (v: string) => void } & React.InputHTMLAttributes<HTMLInputElement>) {
+function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
     <label className="flex flex-col gap-1.5 text-xs font-medium text-muted-foreground">{label}
-      <input {...rest} value={value} onChange={(e) => onChange(e.target.value)} className="rounded-xl border border-input bg-background px-3 py-2.5 text-sm" />
+      <input placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} className="rounded-xl border border-input bg-background px-3 py-2.5 text-sm" />
     </label>
   );
 }
