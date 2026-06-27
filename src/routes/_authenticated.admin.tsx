@@ -1,74 +1,98 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
-import { TrendingUp, Clock, Hospital, CalendarCheck } from "lucide-react";
+import { Siren, Building2, Stethoscope, Users, MapPin, TrendingUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Kaduna Health Dashboard — KARE" }] }),
+  head: () => ({ meta: [{ title: "Gov Dashboard — KARE" }] }),
   component: AdminPage,
 });
 
-const stats = [
-  { l: "Total Emergencies", v: "1,245", d: "+12%", i: TrendingUp, t: "text-emergency bg-emergency-soft" },
-  { l: "Avg Response Time", v: "8m 45s", d: "-8%", i: Clock, t: "text-primary bg-primary-soft" },
-  { l: "Hospital Utilization", v: "72%", d: "+5%", i: Hospital, t: "text-info bg-secondary" },
-  { l: "Active Appointments", v: "3,682", d: "+18%", i: CalendarCheck, t: "text-warning bg-accent" },
-];
-
-const issues = [
-  { n: "Malaria", v: 35, c: "bg-emergency" },
-  { n: "Typhoid", v: 22, c: "bg-warning" },
-  { n: "Respiratory", v: 18, c: "bg-info" },
-  { n: "Hypertension", v: 15, c: "bg-primary" },
-  { n: "Others", v: 10, c: "bg-muted-foreground" },
-];
-
 function AdminPage() {
+  const { data: stats } = useQuery({
+    queryKey: ["admin-stats"],
+    queryFn: async () => {
+      const [sos, hosp, doc, appt] = await Promise.all([
+        supabase.from("sos_incidents").select("id,status,category,created_at,address"),
+        supabase.from("hospitals").select("id"),
+        supabase.from("doctors").select("id"),
+        supabase.from("appointments").select("id,status"),
+      ]);
+      return { sos: sos.data ?? [], hosp: hosp.data ?? [], doc: doc.data ?? [], appt: appt.data ?? [] };
+    },
+    refetchInterval: 10_000,
+  });
+
+  const totalSOS = stats?.sos.length ?? 0;
+  const pending = stats?.sos.filter((s) => s.status === "pending").length ?? 0;
+  const resolved = stats?.sos.filter((s) => s.status === "resolved").length ?? 0;
+  const recent = stats?.sos.slice().sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at)).slice(0, 6) ?? [];
+
+  const byCat: Record<string, number> = {};
+  stats?.sos.forEach((s) => { byCat[s.category] = (byCat[s.category] ?? 0) + 1; });
+
   return (
     <PhoneShell>
-      <TopBar title="Kaduna Health Dashboard" />
-      <div className="px-5 pt-4">
-        <div className="grid grid-cols-2 gap-3">
-          {stats.map((s) => {
-            const Icon = s.i;
-            return (
-              <div key={s.l} className="rounded-2xl border border-border bg-card p-4">
-                <div className="flex items-center justify-between">
-                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${s.t}`}><Icon className="h-4 w-4" /></span>
-                  <span className="text-[11px] font-semibold text-primary">{s.d}</span>
-                </div>
-                <p className="mt-3 text-xl font-bold">{s.v}</p>
-                <p className="text-[11px] text-muted-foreground">{s.l}</p>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-4 rounded-2xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">Top Health Issues</p>
-          <div className="mt-3 space-y-2">
-            {issues.map((i) => (
-              <div key={i.n}>
-                <div className="flex justify-between text-xs">
-                  <span>{i.n}</span><span className="font-semibold">{i.v}%</span>
-                </div>
-                <div className="mt-1 h-2 w-full rounded-full bg-surface">
-                  <div className={`h-full rounded-full ${i.c}`} style={{ width: `${i.v * 2}%` }} />
-                </div>
-              </div>
-            ))}
+      <TopBar title="Government Dashboard" />
+      <div className="px-5 pt-5">
+        <div className="rounded-2xl bg-gradient-to-br from-info to-primary p-5 text-primary-foreground">
+          <p className="text-xs opacity-80">Kaduna State • Live</p>
+          <p className="mt-1 text-3xl font-extrabold">{totalSOS}</p>
+          <p className="text-xs opacity-80">Total SOS incidents</p>
+          <div className="mt-4 flex gap-4 text-xs">
+            <div><p className="opacity-70">Pending</p><p className="text-base font-bold">{pending}</p></div>
+            <div><p className="opacity-70">Resolved</p><p className="text-base font-bold">{resolved}</p></div>
+            <div><p className="opacity-70">Avg ETA</p><p className="text-base font-bold">8m</p></div>
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">Emergency Hotspots</p>
-          <div className="relative mt-3 h-40 rounded-xl bg-gradient-to-br from-primary-soft to-secondary overflow-hidden">
-            <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.06) 1px,transparent 1px)", backgroundSize: "24px 24px" }} />
-            <span className="absolute left-12 top-10 h-6 w-6 rounded-full bg-emergency/60 animate-pulse" />
-            <span className="absolute left-32 top-20 h-8 w-8 rounded-full bg-emergency/70 animate-pulse" />
-            <span className="absolute right-10 bottom-8 h-5 w-5 rounded-full bg-warning/70 animate-pulse" />
-          </div>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <Stat icon={Building2} label="Hospitals" value={stats?.hosp.length ?? 0} />
+          <Stat icon={Stethoscope} label="Doctors" value={stats?.doc.length ?? 0} />
+          <Stat icon={Users} label="Appointments" value={stats?.appt.length ?? 0} />
+          <Stat icon={TrendingUp} label="Active alerts" value={pending} />
+        </div>
+
+        <h3 className="mt-5 text-sm font-semibold">Incidents by category</h3>
+        <div className="mt-2 space-y-2">
+          {Object.entries(byCat).map(([k, v]) => (
+            <div key={k} className="flex items-center gap-3">
+              <span className="w-20 text-xs capitalize">{k}</span>
+              <div className="flex-1 h-2 rounded-full bg-muted">
+                <div className="h-full rounded-full bg-primary" style={{ width: `${Math.min(100, (v / Math.max(1, totalSOS)) * 100)}%` }} />
+              </div>
+              <span className="text-xs font-semibold">{v}</span>
+            </div>
+          ))}
+          {Object.keys(byCat).length === 0 && <p className="text-xs text-muted-foreground">No data yet.</p>}
+        </div>
+
+        <h3 className="mt-5 text-sm font-semibold">Recent SOS</h3>
+        <div className="mt-2 space-y-2">
+          {recent.map((s) => (
+            <div key={s.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emergency-soft text-emergency"><Siren className="h-4 w-4" /></span>
+              <div className="flex-1">
+                <p className="text-sm font-semibold capitalize">{s.category}</p>
+                <p className="flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {s.address ?? "Unknown"}</p>
+              </div>
+              <span className={`rounded-full px-2 py-1 text-[10px] font-semibold capitalize ${s.status === "pending" ? "bg-warning/20 text-foreground" : s.status === "resolved" ? "bg-success/15 text-success" : "bg-primary-soft text-primary"}`}>{s.status}</span>
+            </div>
+          ))}
+          {recent.length === 0 && <p className="text-xs text-muted-foreground">No incidents yet.</p>}
         </div>
       </div>
     </PhoneShell>
+  );
+}
+
+function Stat({ icon: Icon, label, value }: { icon: typeof Building2; label: string; value: number }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-3">
+      <Icon className="h-5 w-5 text-primary" />
+      <p className="mt-2 text-xl font-extrabold">{value}</p>
+      <p className="text-[11px] text-muted-foreground">{label}</p>
+    </div>
   );
 }
