@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { TrendingUp, Clock, Hospital, CalendarCheck } from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Kaduna Health Dashboard — KARE" }] }),
   component: AdminPage,
 });

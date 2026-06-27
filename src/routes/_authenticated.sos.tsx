@@ -3,7 +3,7 @@ import { PhoneShell } from "@/components/kare/PhoneShell";
 import { Siren, Ambulance, Flame, Shield, Car, Baby, MapPin, ChevronLeft, Phone } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/sos")({
+export const Route = createFileRoute("/_authenticated/sos")({
   head: () => ({ meta: [{ title: "SOS Emergency — KARE" }] }),
   component: SOS,
 });

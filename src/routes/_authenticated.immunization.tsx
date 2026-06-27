@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { CheckCircle2, Clock } from "lucide-react";
 
-export const Route = createFileRoute("/immunization")({
+export const Route = createFileRoute("/_authenticated/immunization")({
   head: () => ({ meta: [{ title: "Child Immunization — KARE" }] }),
   component: ImmunizationPage,
 });

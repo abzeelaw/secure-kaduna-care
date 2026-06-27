@@ -7,7 +7,7 @@ import {
   Brain, Truck, BarChart3, Siren, Sparkles
 } from "lucide-react";
 
-export const Route = createFileRoute("/home")({
+export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({ meta: [{ title: "Home — KARE" }] }),
   component: Home,
 });

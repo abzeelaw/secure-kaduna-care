@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { MessageCircle, ClipboardCheck, Siren, ChevronRight } from "lucide-react";
 
-export const Route = createFileRoute("/mental")({
+export const Route = createFileRoute("/_authenticated/mental")({
   head: () => ({ meta: [{ title: "Mental Health Support — KARE" }] }),
   component: MentalPage,
 });

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { User, HeartPulse, Phone, Bell, Lock, Languages, HelpCircle, Info, LogOut, ChevronRight } from "lucide-react";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({ meta: [{ title: "Profile & Settings — KARE" }] }),
   component: ProfilePage,
 });

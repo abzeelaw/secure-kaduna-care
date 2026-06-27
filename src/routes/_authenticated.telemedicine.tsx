@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell } from "@/components/kare/PhoneShell";
 import { Mic, Video, PhoneOff, MessageSquare } from "lucide-react";
 
-export const Route = createFileRoute("/telemedicine")({
+export const Route = createFileRoute("/_authenticated/telemedicine")({
   head: () => ({ meta: [{ title: "Telemedicine — KARE" }] }),
   component: TelePage,
 });

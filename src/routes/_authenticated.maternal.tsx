@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Baby, Apple, AlertTriangle, Calendar, Siren } from "lucide-react";
 
-export const Route = createFileRoute("/maternal")({
+export const Route = createFileRoute("/_authenticated/maternal")({
   head: () => ({ meta: [{ title: "Maternal Health — KARE" }] }),
   component: MaternalPage,
 });

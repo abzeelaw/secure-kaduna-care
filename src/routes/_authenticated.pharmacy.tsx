@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Search, MapPin, Phone } from "lucide-react";
 
-export const Route = createFileRoute("/pharmacy")({
+export const Route = createFileRoute("/_authenticated/pharmacy")({
   head: () => ({ meta: [{ title: "Pharmacy Finder — KARE" }] }),
   component: PharmacyPage,
 });

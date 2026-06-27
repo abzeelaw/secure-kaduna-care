@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Car, Flame, Droplets, Building2, AlertCircle, MapPin } from "lucide-react";
 
-export const Route = createFileRoute("/incident")({
+export const Route = createFileRoute("/_authenticated/incident")({
   head: () => ({ meta: [{ title: "Report Incident — KARE" }] }),
   component: IncidentPage,
 });

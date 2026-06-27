@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 
-export const Route = createFileRoute("/blood-bank")({
+export const Route = createFileRoute("/_authenticated/blood-bank")({
   head: () => ({ meta: [{ title: "Community Blood Bank — KARE" }] }),
   component: BloodBankPage,
 });

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Phone, MapPin } from "lucide-react";
 
-export const Route = createFileRoute("/blood-donors")({
+export const Route = createFileRoute("/_authenticated/blood-donors")({
   head: () => ({ meta: [{ title: "Blood Donors — KARE" }] }),
   component: DonorsPage,
 });

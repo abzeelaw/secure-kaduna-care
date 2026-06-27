@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { ShieldCheck, ChevronRight } from "lucide-react";
 
-export const Route = createFileRoute("/insurance")({
+export const Route = createFileRoute("/_authenticated/insurance")({
   head: () => ({ meta: [{ title: "Health Insurance — KARE" }] }),
   component: InsurancePage,
 });

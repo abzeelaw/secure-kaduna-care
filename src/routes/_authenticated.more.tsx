@@ -6,7 +6,7 @@ import {
   Bell, Lock, Languages, HelpCircle, LogOut, ChevronRight, Sparkles, Video
 } from "lucide-react";
 
-export const Route = createFileRoute("/more")({
+export const Route = createFileRoute("/_authenticated/more")({
   head: () => ({ meta: [{ title: "More — KARE" }] }),
   component: MorePage,
 });

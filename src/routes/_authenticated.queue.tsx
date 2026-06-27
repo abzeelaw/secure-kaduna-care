@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 
-export const Route = createFileRoute("/queue")({
+export const Route = createFileRoute("/_authenticated/queue")({
   head: () => ({ meta: [{ title: "Hospital Queue — KARE" }] }),
   component: QueuePage,
 });

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { BookOpen } from "lucide-react";
 
-export const Route = createFileRoute("/education")({
+export const Route = createFileRoute("/_authenticated/education")({
   head: () => ({ meta: [{ title: "Health Education — KARE" }] }),
   component: EducationPage,
 });

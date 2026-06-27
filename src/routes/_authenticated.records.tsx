@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { FileText, Pill, FlaskConical, Syringe, AlertCircle, HeartPulse, Download, ChevronRight } from "lucide-react";
 
-export const Route = createFileRoute("/records")({
+export const Route = createFileRoute("/_authenticated/records")({
   head: () => ({ meta: [{ title: "Medical Records — KARE" }] }),
   component: RecordsPage,
 });

@@ -3,7 +3,7 @@ import { PhoneShell } from "@/components/kare/PhoneShell";
 import { ChevronLeft, Search, Building2, Star, MapPin } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/hospitals")({
+export const Route = createFileRoute("/_authenticated/hospitals")({
   head: () => ({ meta: [{ title: "Hospitals — KARE" }] }),
   component: Hospitals,
 });

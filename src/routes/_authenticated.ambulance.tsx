@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneShell } from "@/components/kare/PhoneShell";
 import { ChevronLeft, Phone, MessageCircle, Share2, Navigation, Ambulance, Clock } from "lucide-react";
 
-export const Route = createFileRoute("/ambulance")({
+export const Route = createFileRoute("/_authenticated/ambulance")({
   head: () => ({ meta: [{ title: "Ambulance Tracking — KARE" }] }),
   component: Track,
 });

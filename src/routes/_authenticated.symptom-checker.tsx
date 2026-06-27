@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Sparkles } from "lucide-react";
 
-export const Route = createFileRoute("/symptom-checker")({
+export const Route = createFileRoute("/_authenticated/symptom-checker")({
   head: () => ({ meta: [{ title: "AI Symptom Checker — KARE" }] }),
   component: SymptomPage,
 });

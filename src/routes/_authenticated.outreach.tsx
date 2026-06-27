@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Stethoscope, Calendar, MapPin } from "lucide-react";
 
-export const Route = createFileRoute("/outreach")({
+export const Route = createFileRoute("/_authenticated/outreach")({
   head: () => ({ meta: [{ title: "Medical Outreach — KARE" }] }),
   component: OutreachPage,
 });
