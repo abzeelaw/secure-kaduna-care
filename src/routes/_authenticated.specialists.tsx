@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneShell } from "@/components/kare/PhoneShell";
-import { ChevronLeft, Search, Heart, Brain, Baby, Bone, Ear, User, Stethoscope, Star } from "lucide-react";
+import { ChevronLeft, Search, Heart, Brain, Baby, Bone, Stethoscope, User, Star } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/specialists")({
   head: () => ({ meta: [{ title: "Specialists — KARE" }] }),
@@ -8,23 +11,36 @@ export const Route = createFileRoute("/_authenticated/specialists")({
 });
 
 const cats = [
-  { label: "Cardiologist", icon: Heart },
-  { label: "Pediatrician", icon: Baby },
-  { label: "Gynecologist", icon: User },
-  { label: "Neurologist", icon: Brain },
-  { label: "Dermatologist", icon: Stethoscope },
-  { label: "Orthopedic", icon: Bone },
-  { label: "ENT", icon: Ear },
-  { label: "Psychiatrist", icon: Brain },
-];
-
-const docs = [
-  { id: "1", name: "Dr. Musa Ibrahim", spec: "Cardiologist", exp: "15 yrs exp", rating: 4.9 },
-  { id: "2", name: "Dr. Aisha Yusuf", spec: "Pediatrician", exp: "10 yrs exp", rating: 4.8 },
-  { id: "3", name: "Dr. Fatima Bello", spec: "Gynecologist", exp: "12 yrs exp", rating: 4.9 },
+  { label: "Cardiology", icon: Heart },
+  { label: "Pediatrics", icon: Baby },
+  { label: "Obstetrics", icon: User },
+  { label: "Psychiatry", icon: Brain },
+  { label: "Dermatology", icon: Stethoscope },
+  { label: "Orthopedics", icon: Bone },
+  { label: "Internal", icon: Stethoscope },
+  { label: "General", icon: User },
 ];
 
 function Specialists() {
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState<string | null>(null);
+  const { data = [], isLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("doctors").select("*, hospital:hospitals(name)").order("rating", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const list = useMemo(
+    () => data.filter((d) =>
+      (!q || d.full_name.toLowerCase().includes(q.toLowerCase()) || d.specialty.toLowerCase().includes(q.toLowerCase())) &&
+      (!cat || d.specialty.toLowerCase().includes(cat.toLowerCase()))
+    ),
+    [data, q, cat],
+  );
+
   return (
     <PhoneShell>
       <div className="flex items-center gap-3 px-5 pt-4">
@@ -37,7 +53,7 @@ function Specialists() {
       <div className="px-5 pt-4">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-4 py-3">
           <Search className="h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search by specialty or condition…" className="flex-1 bg-transparent text-sm outline-none" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by specialty or doctor…" className="flex-1 bg-transparent text-sm outline-none" />
         </div>
       </div>
 
@@ -45,29 +61,32 @@ function Specialists() {
       <div className="grid grid-cols-4 gap-2 px-5">
         {cats.map((c) => {
           const Icon = c.icon;
+          const active = cat === c.label;
           return (
-            <div key={c.label} className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-background p-3">
+            <button key={c.label} onClick={() => setCat(active ? null : c.label)} className={`flex flex-col items-center gap-2 rounded-2xl border p-3 ${active ? "border-primary bg-primary-soft" : "border-border bg-background"}`}>
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
                 <Icon className="h-5 w-5" />
               </span>
               <span className="text-[10px] font-medium text-center leading-tight">{c.label}</span>
-            </div>
+            </button>
           );
         })}
       </div>
 
-      <h2 className="px-5 pt-6 pb-3 text-sm font-semibold">Top Specialists</h2>
+      <h2 className="px-5 pt-6 pb-3 text-sm font-semibold">{cat ?? "All Specialists"}</h2>
       <div className="space-y-3 px-5">
-        {docs.map((d) => (
+        {isLoading && <p className="text-center text-sm text-muted-foreground">Loading…</p>}
+        {!isLoading && list.length === 0 && <p className="text-center text-sm text-muted-foreground">No doctors match.</p>}
+        {list.map((d) => (
           <Link key={d.id} to="/doctors/$id" params={{ id: d.id }} className="flex items-center gap-3 rounded-2xl border border-border bg-background p-3">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground text-base font-semibold">
-              {d.name.split(" ")[1][0]}
+              {d.full_name.replace("Dr. ", "").split(" ").map((s) => s[0]).slice(0, 2).join("")}
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold">{d.name}</p>
-              <p className="text-xs text-muted-foreground">{d.spec} • {d.exp}</p>
+              <p className="text-sm font-semibold">{d.full_name}</p>
+              <p className="text-xs text-muted-foreground">{d.specialty} • {d.years_experience} yrs exp</p>
               <p className="mt-1 flex items-center gap-1 text-[11px] font-semibold">
-                <Star className="h-3 w-3 fill-warning text-warning" /> {d.rating}
+                <Star className="h-3 w-3 fill-warning text-warning" /> {Number(d.rating).toFixed(1)}
               </p>
             </div>
           </Link>
