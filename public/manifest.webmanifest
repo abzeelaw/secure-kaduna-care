@@ -1,0 +1,16 @@
+{
+  "name": "KARE — Kaduna Emergency Response & Healthcare",
+  "short_name": "KARE",
+  "description": "All-in-one emergency response and healthcare app for Kaduna State residents.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#00A99D",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
