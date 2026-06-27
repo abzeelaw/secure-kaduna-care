@@ -9,248 +9,254 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TransportRouteImport } from './routes/transport'
-import { Route as TelemedicineRouteImport } from './routes/telemedicine'
-import { Route as SymptomCheckerRouteImport } from './routes/symptom-checker'
-import { Route as SpecialistsRouteImport } from './routes/specialists'
-import { Route as SosRouteImport } from './routes/sos'
-import { Route as RecordsRouteImport } from './routes/records'
-import { Route as QueueRouteImport } from './routes/queue'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as PharmacyRouteImport } from './routes/pharmacy'
-import { Route as OutreachRouteImport } from './routes/outreach'
-import { Route as MoreRouteImport } from './routes/more'
-import { Route as MentalRouteImport } from './routes/mental'
-import { Route as MaternalRouteImport } from './routes/maternal'
-import { Route as InsuranceRouteImport } from './routes/insurance'
-import { Route as IncidentRouteImport } from './routes/incident'
-import { Route as ImmunizationRouteImport } from './routes/immunization'
-import { Route as HospitalsRouteImport } from './routes/hospitals'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as EducationRouteImport } from './routes/education'
-import { Route as BloodDonorsRouteImport } from './routes/blood-donors'
-import { Route as BloodBankRouteImport } from './routes/blood-bank'
-import { Route as AppointmentsRouteImport } from './routes/appointments'
-import { Route as AmbulanceRouteImport } from './routes/ambulance'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DoctorsIdRouteImport } from './routes/doctors.$id'
+import { Route as AuthenticatedTransportRouteImport } from './routes/_authenticated.transport'
+import { Route as AuthenticatedTelemedicineRouteImport } from './routes/_authenticated.telemedicine'
+import { Route as AuthenticatedSymptomCheckerRouteImport } from './routes/_authenticated.symptom-checker'
+import { Route as AuthenticatedSpecialistsRouteImport } from './routes/_authenticated.specialists'
+import { Route as AuthenticatedSosRouteImport } from './routes/_authenticated.sos'
+import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated.records'
+import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated.queue'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
+import { Route as AuthenticatedPharmacyRouteImport } from './routes/_authenticated.pharmacy'
+import { Route as AuthenticatedOutreachRouteImport } from './routes/_authenticated.outreach'
+import { Route as AuthenticatedMoreRouteImport } from './routes/_authenticated.more'
+import { Route as AuthenticatedMentalRouteImport } from './routes/_authenticated.mental'
+import { Route as AuthenticatedMaternalRouteImport } from './routes/_authenticated.maternal'
+import { Route as AuthenticatedInsuranceRouteImport } from './routes/_authenticated.insurance'
+import { Route as AuthenticatedIncidentRouteImport } from './routes/_authenticated.incident'
+import { Route as AuthenticatedImmunizationRouteImport } from './routes/_authenticated.immunization'
+import { Route as AuthenticatedHospitalsRouteImport } from './routes/_authenticated.hospitals'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated.home'
+import { Route as AuthenticatedEducationRouteImport } from './routes/_authenticated.education'
+import { Route as AuthenticatedBloodDonorsRouteImport } from './routes/_authenticated.blood-donors'
+import { Route as AuthenticatedBloodBankRouteImport } from './routes/_authenticated.blood-bank'
+import { Route as AuthenticatedAppointmentsRouteImport } from './routes/_authenticated.appointments'
+import { Route as AuthenticatedAmbulanceRouteImport } from './routes/_authenticated.ambulance'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
+import { Route as AuthenticatedDoctorsIdRouteImport } from './routes/_authenticated.doctors.$id'
 
-const TransportRoute = TransportRouteImport.update({
-  id: '/transport',
-  path: '/transport',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TelemedicineRoute = TelemedicineRouteImport.update({
-  id: '/telemedicine',
-  path: '/telemedicine',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SymptomCheckerRoute = SymptomCheckerRouteImport.update({
-  id: '/symptom-checker',
-  path: '/symptom-checker',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SpecialistsRoute = SpecialistsRouteImport.update({
-  id: '/specialists',
-  path: '/specialists',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SosRoute = SosRouteImport.update({
-  id: '/sos',
-  path: '/sos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecordsRoute = RecordsRouteImport.update({
-  id: '/records',
-  path: '/records',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QueueRoute = QueueRouteImport.update({
-  id: '/queue',
-  path: '/queue',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PharmacyRoute = PharmacyRouteImport.update({
-  id: '/pharmacy',
-  path: '/pharmacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OutreachRoute = OutreachRouteImport.update({
-  id: '/outreach',
-  path: '/outreach',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MoreRoute = MoreRouteImport.update({
-  id: '/more',
-  path: '/more',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MentalRoute = MentalRouteImport.update({
-  id: '/mental',
-  path: '/mental',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MaternalRoute = MaternalRouteImport.update({
-  id: '/maternal',
-  path: '/maternal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsuranceRoute = InsuranceRouteImport.update({
-  id: '/insurance',
-  path: '/insurance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IncidentRoute = IncidentRouteImport.update({
-  id: '/incident',
-  path: '/incident',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImmunizationRoute = ImmunizationRouteImport.update({
-  id: '/immunization',
-  path: '/immunization',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HospitalsRoute = HospitalsRouteImport.update({
-  id: '/hospitals',
-  path: '/hospitals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EducationRoute = EducationRouteImport.update({
-  id: '/education',
-  path: '/education',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BloodDonorsRoute = BloodDonorsRouteImport.update({
-  id: '/blood-donors',
-  path: '/blood-donors',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BloodBankRoute = BloodBankRouteImport.update({
-  id: '/blood-bank',
-  path: '/blood-bank',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppointmentsRoute = AppointmentsRouteImport.update({
-  id: '/appointments',
-  path: '/appointments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AmbulanceRoute = AmbulanceRouteImport.update({
-  id: '/ambulance',
-  path: '/ambulance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DoctorsIdRoute = DoctorsIdRouteImport.update({
-  id: '/doctors/$id',
+const AuthenticatedTransportRoute = AuthenticatedTransportRouteImport.update({
+  id: '/_authenticated/transport',
+  path: '/transport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTelemedicineRoute =
+  AuthenticatedTelemedicineRouteImport.update({
+    id: '/_authenticated/telemedicine',
+    path: '/telemedicine',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSymptomCheckerRoute =
+  AuthenticatedSymptomCheckerRouteImport.update({
+    id: '/_authenticated/symptom-checker',
+    path: '/symptom-checker',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSpecialistsRoute =
+  AuthenticatedSpecialistsRouteImport.update({
+    id: '/_authenticated/specialists',
+    path: '/specialists',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSosRoute = AuthenticatedSosRouteImport.update({
+  id: '/_authenticated/sos',
+  path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRecordsRoute = AuthenticatedRecordsRouteImport.update({
+  id: '/_authenticated/records',
+  path: '/records',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedQueueRoute = AuthenticatedQueueRouteImport.update({
+  id: '/_authenticated/queue',
+  path: '/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/_authenticated/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedPharmacyRoute = AuthenticatedPharmacyRouteImport.update({
+  id: '/_authenticated/pharmacy',
+  path: '/pharmacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedOutreachRoute = AuthenticatedOutreachRouteImport.update({
+  id: '/_authenticated/outreach',
+  path: '/outreach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMoreRoute = AuthenticatedMoreRouteImport.update({
+  id: '/_authenticated/more',
+  path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMentalRoute = AuthenticatedMentalRouteImport.update({
+  id: '/_authenticated/mental',
+  path: '/mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMaternalRoute = AuthenticatedMaternalRouteImport.update({
+  id: '/_authenticated/maternal',
+  path: '/maternal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedInsuranceRoute = AuthenticatedInsuranceRouteImport.update({
+  id: '/_authenticated/insurance',
+  path: '/insurance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIncidentRoute = AuthenticatedIncidentRouteImport.update({
+  id: '/_authenticated/incident',
+  path: '/incident',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedImmunizationRoute =
+  AuthenticatedImmunizationRouteImport.update({
+    id: '/_authenticated/immunization',
+    path: '/immunization',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedHospitalsRoute = AuthenticatedHospitalsRouteImport.update({
+  id: '/_authenticated/hospitals',
+  path: '/hospitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/_authenticated/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEducationRoute = AuthenticatedEducationRouteImport.update({
+  id: '/_authenticated/education',
+  path: '/education',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedBloodDonorsRoute =
+  AuthenticatedBloodDonorsRouteImport.update({
+    id: '/_authenticated/blood-donors',
+    path: '/blood-donors',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedBloodBankRoute = AuthenticatedBloodBankRouteImport.update({
+  id: '/_authenticated/blood-bank',
+  path: '/blood-bank',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAppointmentsRoute =
+  AuthenticatedAppointmentsRouteImport.update({
+    id: '/_authenticated/appointments',
+    path: '/appointments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedAmbulanceRoute = AuthenticatedAmbulanceRouteImport.update({
+  id: '/_authenticated/ambulance',
+  path: '/ambulance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/_authenticated/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDoctorsIdRoute = AuthenticatedDoctorsIdRouteImport.update({
+  id: '/_authenticated/doctors/$id',
   path: '/doctors/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/ambulance': typeof AmbulanceRoute
-  '/appointments': typeof AppointmentsRoute
-  '/blood-bank': typeof BloodBankRoute
-  '/blood-donors': typeof BloodDonorsRoute
-  '/education': typeof EducationRoute
-  '/home': typeof HomeRoute
-  '/hospitals': typeof HospitalsRoute
-  '/immunization': typeof ImmunizationRoute
-  '/incident': typeof IncidentRoute
-  '/insurance': typeof InsuranceRoute
-  '/maternal': typeof MaternalRoute
-  '/mental': typeof MentalRoute
-  '/more': typeof MoreRoute
-  '/outreach': typeof OutreachRoute
-  '/pharmacy': typeof PharmacyRoute
-  '/profile': typeof ProfileRoute
-  '/queue': typeof QueueRoute
-  '/records': typeof RecordsRoute
-  '/sos': typeof SosRoute
-  '/specialists': typeof SpecialistsRoute
-  '/symptom-checker': typeof SymptomCheckerRoute
-  '/telemedicine': typeof TelemedicineRoute
-  '/transport': typeof TransportRoute
-  '/doctors/$id': typeof DoctorsIdRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/ambulance': typeof AuthenticatedAmbulanceRoute
+  '/appointments': typeof AuthenticatedAppointmentsRoute
+  '/blood-bank': typeof AuthenticatedBloodBankRoute
+  '/blood-donors': typeof AuthenticatedBloodDonorsRoute
+  '/education': typeof AuthenticatedEducationRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/hospitals': typeof AuthenticatedHospitalsRoute
+  '/immunization': typeof AuthenticatedImmunizationRoute
+  '/incident': typeof AuthenticatedIncidentRoute
+  '/insurance': typeof AuthenticatedInsuranceRoute
+  '/maternal': typeof AuthenticatedMaternalRoute
+  '/mental': typeof AuthenticatedMentalRoute
+  '/more': typeof AuthenticatedMoreRoute
+  '/outreach': typeof AuthenticatedOutreachRoute
+  '/pharmacy': typeof AuthenticatedPharmacyRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/queue': typeof AuthenticatedQueueRoute
+  '/records': typeof AuthenticatedRecordsRoute
+  '/sos': typeof AuthenticatedSosRoute
+  '/specialists': typeof AuthenticatedSpecialistsRoute
+  '/symptom-checker': typeof AuthenticatedSymptomCheckerRoute
+  '/telemedicine': typeof AuthenticatedTelemedicineRoute
+  '/transport': typeof AuthenticatedTransportRoute
+  '/doctors/$id': typeof AuthenticatedDoctorsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/ambulance': typeof AmbulanceRoute
-  '/appointments': typeof AppointmentsRoute
-  '/blood-bank': typeof BloodBankRoute
-  '/blood-donors': typeof BloodDonorsRoute
-  '/education': typeof EducationRoute
-  '/home': typeof HomeRoute
-  '/hospitals': typeof HospitalsRoute
-  '/immunization': typeof ImmunizationRoute
-  '/incident': typeof IncidentRoute
-  '/insurance': typeof InsuranceRoute
-  '/maternal': typeof MaternalRoute
-  '/mental': typeof MentalRoute
-  '/more': typeof MoreRoute
-  '/outreach': typeof OutreachRoute
-  '/pharmacy': typeof PharmacyRoute
-  '/profile': typeof ProfileRoute
-  '/queue': typeof QueueRoute
-  '/records': typeof RecordsRoute
-  '/sos': typeof SosRoute
-  '/specialists': typeof SpecialistsRoute
-  '/symptom-checker': typeof SymptomCheckerRoute
-  '/telemedicine': typeof TelemedicineRoute
-  '/transport': typeof TransportRoute
-  '/doctors/$id': typeof DoctorsIdRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/ambulance': typeof AuthenticatedAmbulanceRoute
+  '/appointments': typeof AuthenticatedAppointmentsRoute
+  '/blood-bank': typeof AuthenticatedBloodBankRoute
+  '/blood-donors': typeof AuthenticatedBloodDonorsRoute
+  '/education': typeof AuthenticatedEducationRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/hospitals': typeof AuthenticatedHospitalsRoute
+  '/immunization': typeof AuthenticatedImmunizationRoute
+  '/incident': typeof AuthenticatedIncidentRoute
+  '/insurance': typeof AuthenticatedInsuranceRoute
+  '/maternal': typeof AuthenticatedMaternalRoute
+  '/mental': typeof AuthenticatedMentalRoute
+  '/more': typeof AuthenticatedMoreRoute
+  '/outreach': typeof AuthenticatedOutreachRoute
+  '/pharmacy': typeof AuthenticatedPharmacyRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/queue': typeof AuthenticatedQueueRoute
+  '/records': typeof AuthenticatedRecordsRoute
+  '/sos': typeof AuthenticatedSosRoute
+  '/specialists': typeof AuthenticatedSpecialistsRoute
+  '/symptom-checker': typeof AuthenticatedSymptomCheckerRoute
+  '/telemedicine': typeof AuthenticatedTelemedicineRoute
+  '/transport': typeof AuthenticatedTransportRoute
+  '/doctors/$id': typeof AuthenticatedDoctorsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/ambulance': typeof AmbulanceRoute
-  '/appointments': typeof AppointmentsRoute
-  '/blood-bank': typeof BloodBankRoute
-  '/blood-donors': typeof BloodDonorsRoute
-  '/education': typeof EducationRoute
-  '/home': typeof HomeRoute
-  '/hospitals': typeof HospitalsRoute
-  '/immunization': typeof ImmunizationRoute
-  '/incident': typeof IncidentRoute
-  '/insurance': typeof InsuranceRoute
-  '/maternal': typeof MaternalRoute
-  '/mental': typeof MentalRoute
-  '/more': typeof MoreRoute
-  '/outreach': typeof OutreachRoute
-  '/pharmacy': typeof PharmacyRoute
-  '/profile': typeof ProfileRoute
-  '/queue': typeof QueueRoute
-  '/records': typeof RecordsRoute
-  '/sos': typeof SosRoute
-  '/specialists': typeof SpecialistsRoute
-  '/symptom-checker': typeof SymptomCheckerRoute
-  '/telemedicine': typeof TelemedicineRoute
-  '/transport': typeof TransportRoute
-  '/doctors/$id': typeof DoctorsIdRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/ambulance': typeof AuthenticatedAmbulanceRoute
+  '/_authenticated/appointments': typeof AuthenticatedAppointmentsRoute
+  '/_authenticated/blood-bank': typeof AuthenticatedBloodBankRoute
+  '/_authenticated/blood-donors': typeof AuthenticatedBloodDonorsRoute
+  '/_authenticated/education': typeof AuthenticatedEducationRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/hospitals': typeof AuthenticatedHospitalsRoute
+  '/_authenticated/immunization': typeof AuthenticatedImmunizationRoute
+  '/_authenticated/incident': typeof AuthenticatedIncidentRoute
+  '/_authenticated/insurance': typeof AuthenticatedInsuranceRoute
+  '/_authenticated/maternal': typeof AuthenticatedMaternalRoute
+  '/_authenticated/mental': typeof AuthenticatedMentalRoute
+  '/_authenticated/more': typeof AuthenticatedMoreRoute
+  '/_authenticated/outreach': typeof AuthenticatedOutreachRoute
+  '/_authenticated/pharmacy': typeof AuthenticatedPharmacyRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/queue': typeof AuthenticatedQueueRoute
+  '/_authenticated/records': typeof AuthenticatedRecordsRoute
+  '/_authenticated/sos': typeof AuthenticatedSosRoute
+  '/_authenticated/specialists': typeof AuthenticatedSpecialistsRoute
+  '/_authenticated/symptom-checker': typeof AuthenticatedSymptomCheckerRoute
+  '/_authenticated/telemedicine': typeof AuthenticatedTelemedicineRoute
+  '/_authenticated/transport': typeof AuthenticatedTransportRoute
+  '/_authenticated/doctors/$id': typeof AuthenticatedDoctorsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -312,232 +318,64 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/admin'
-    | '/ambulance'
-    | '/appointments'
-    | '/blood-bank'
-    | '/blood-donors'
-    | '/education'
-    | '/home'
-    | '/hospitals'
-    | '/immunization'
-    | '/incident'
-    | '/insurance'
-    | '/maternal'
-    | '/mental'
-    | '/more'
-    | '/outreach'
-    | '/pharmacy'
-    | '/profile'
-    | '/queue'
-    | '/records'
-    | '/sos'
-    | '/specialists'
-    | '/symptom-checker'
-    | '/telemedicine'
-    | '/transport'
-    | '/doctors/$id'
+    | '/_authenticated/admin'
+    | '/_authenticated/ambulance'
+    | '/_authenticated/appointments'
+    | '/_authenticated/blood-bank'
+    | '/_authenticated/blood-donors'
+    | '/_authenticated/education'
+    | '/_authenticated/home'
+    | '/_authenticated/hospitals'
+    | '/_authenticated/immunization'
+    | '/_authenticated/incident'
+    | '/_authenticated/insurance'
+    | '/_authenticated/maternal'
+    | '/_authenticated/mental'
+    | '/_authenticated/more'
+    | '/_authenticated/outreach'
+    | '/_authenticated/pharmacy'
+    | '/_authenticated/profile'
+    | '/_authenticated/queue'
+    | '/_authenticated/records'
+    | '/_authenticated/sos'
+    | '/_authenticated/specialists'
+    | '/_authenticated/symptom-checker'
+    | '/_authenticated/telemedicine'
+    | '/_authenticated/transport'
+    | '/_authenticated/doctors/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
-  AmbulanceRoute: typeof AmbulanceRoute
-  AppointmentsRoute: typeof AppointmentsRoute
-  BloodBankRoute: typeof BloodBankRoute
-  BloodDonorsRoute: typeof BloodDonorsRoute
-  EducationRoute: typeof EducationRoute
-  HomeRoute: typeof HomeRoute
-  HospitalsRoute: typeof HospitalsRoute
-  ImmunizationRoute: typeof ImmunizationRoute
-  IncidentRoute: typeof IncidentRoute
-  InsuranceRoute: typeof InsuranceRoute
-  MaternalRoute: typeof MaternalRoute
-  MentalRoute: typeof MentalRoute
-  MoreRoute: typeof MoreRoute
-  OutreachRoute: typeof OutreachRoute
-  PharmacyRoute: typeof PharmacyRoute
-  ProfileRoute: typeof ProfileRoute
-  QueueRoute: typeof QueueRoute
-  RecordsRoute: typeof RecordsRoute
-  SosRoute: typeof SosRoute
-  SpecialistsRoute: typeof SpecialistsRoute
-  SymptomCheckerRoute: typeof SymptomCheckerRoute
-  TelemedicineRoute: typeof TelemedicineRoute
-  TransportRoute: typeof TransportRoute
-  DoctorsIdRoute: typeof DoctorsIdRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAmbulanceRoute: typeof AuthenticatedAmbulanceRoute
+  AuthenticatedAppointmentsRoute: typeof AuthenticatedAppointmentsRoute
+  AuthenticatedBloodBankRoute: typeof AuthenticatedBloodBankRoute
+  AuthenticatedBloodDonorsRoute: typeof AuthenticatedBloodDonorsRoute
+  AuthenticatedEducationRoute: typeof AuthenticatedEducationRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedHospitalsRoute: typeof AuthenticatedHospitalsRoute
+  AuthenticatedImmunizationRoute: typeof AuthenticatedImmunizationRoute
+  AuthenticatedIncidentRoute: typeof AuthenticatedIncidentRoute
+  AuthenticatedInsuranceRoute: typeof AuthenticatedInsuranceRoute
+  AuthenticatedMaternalRoute: typeof AuthenticatedMaternalRoute
+  AuthenticatedMentalRoute: typeof AuthenticatedMentalRoute
+  AuthenticatedMoreRoute: typeof AuthenticatedMoreRoute
+  AuthenticatedOutreachRoute: typeof AuthenticatedOutreachRoute
+  AuthenticatedPharmacyRoute: typeof AuthenticatedPharmacyRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedQueueRoute: typeof AuthenticatedQueueRoute
+  AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRoute
+  AuthenticatedSosRoute: typeof AuthenticatedSosRoute
+  AuthenticatedSpecialistsRoute: typeof AuthenticatedSpecialistsRoute
+  AuthenticatedSymptomCheckerRoute: typeof AuthenticatedSymptomCheckerRoute
+  AuthenticatedTelemedicineRoute: typeof AuthenticatedTelemedicineRoute
+  AuthenticatedTransportRoute: typeof AuthenticatedTransportRoute
+  AuthenticatedDoctorsIdRoute: typeof AuthenticatedDoctorsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/transport': {
-      id: '/transport'
-      path: '/transport'
-      fullPath: '/transport'
-      preLoaderRoute: typeof TransportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/telemedicine': {
-      id: '/telemedicine'
-      path: '/telemedicine'
-      fullPath: '/telemedicine'
-      preLoaderRoute: typeof TelemedicineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/symptom-checker': {
-      id: '/symptom-checker'
-      path: '/symptom-checker'
-      fullPath: '/symptom-checker'
-      preLoaderRoute: typeof SymptomCheckerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/specialists': {
-      id: '/specialists'
-      path: '/specialists'
-      fullPath: '/specialists'
-      preLoaderRoute: typeof SpecialistsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sos': {
-      id: '/sos'
-      path: '/sos'
-      fullPath: '/sos'
-      preLoaderRoute: typeof SosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/records': {
-      id: '/records'
-      path: '/records'
-      fullPath: '/records'
-      preLoaderRoute: typeof RecordsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/queue': {
-      id: '/queue'
-      path: '/queue'
-      fullPath: '/queue'
-      preLoaderRoute: typeof QueueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pharmacy': {
-      id: '/pharmacy'
-      path: '/pharmacy'
-      fullPath: '/pharmacy'
-      preLoaderRoute: typeof PharmacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/outreach': {
-      id: '/outreach'
-      path: '/outreach'
-      fullPath: '/outreach'
-      preLoaderRoute: typeof OutreachRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/more': {
-      id: '/more'
-      path: '/more'
-      fullPath: '/more'
-      preLoaderRoute: typeof MoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mental': {
-      id: '/mental'
-      path: '/mental'
-      fullPath: '/mental'
-      preLoaderRoute: typeof MentalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/maternal': {
-      id: '/maternal'
-      path: '/maternal'
-      fullPath: '/maternal'
-      preLoaderRoute: typeof MaternalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insurance': {
-      id: '/insurance'
-      path: '/insurance'
-      fullPath: '/insurance'
-      preLoaderRoute: typeof InsuranceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/incident': {
-      id: '/incident'
-      path: '/incident'
-      fullPath: '/incident'
-      preLoaderRoute: typeof IncidentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/immunization': {
-      id: '/immunization'
-      path: '/immunization'
-      fullPath: '/immunization'
-      preLoaderRoute: typeof ImmunizationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hospitals': {
-      id: '/hospitals'
-      path: '/hospitals'
-      fullPath: '/hospitals'
-      preLoaderRoute: typeof HospitalsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/education': {
-      id: '/education'
-      path: '/education'
-      fullPath: '/education'
-      preLoaderRoute: typeof EducationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blood-donors': {
-      id: '/blood-donors'
-      path: '/blood-donors'
-      fullPath: '/blood-donors'
-      preLoaderRoute: typeof BloodDonorsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blood-bank': {
-      id: '/blood-bank'
-      path: '/blood-bank'
-      fullPath: '/blood-bank'
-      preLoaderRoute: typeof BloodBankRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/appointments': {
-      id: '/appointments'
-      path: '/appointments'
-      fullPath: '/appointments'
-      preLoaderRoute: typeof AppointmentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ambulance': {
-      id: '/ambulance'
-      path: '/ambulance'
-      fullPath: '/ambulance'
-      preLoaderRoute: typeof AmbulanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -545,11 +383,179 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/doctors/$id': {
-      id: '/doctors/$id'
+    '/_authenticated/transport': {
+      id: '/_authenticated/transport'
+      path: '/transport'
+      fullPath: '/transport'
+      preLoaderRoute: typeof AuthenticatedTransportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/telemedicine': {
+      id: '/_authenticated/telemedicine'
+      path: '/telemedicine'
+      fullPath: '/telemedicine'
+      preLoaderRoute: typeof AuthenticatedTelemedicineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/symptom-checker': {
+      id: '/_authenticated/symptom-checker'
+      path: '/symptom-checker'
+      fullPath: '/symptom-checker'
+      preLoaderRoute: typeof AuthenticatedSymptomCheckerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/specialists': {
+      id: '/_authenticated/specialists'
+      path: '/specialists'
+      fullPath: '/specialists'
+      preLoaderRoute: typeof AuthenticatedSpecialistsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/sos': {
+      id: '/_authenticated/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof AuthenticatedSosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/records': {
+      id: '/_authenticated/records'
+      path: '/records'
+      fullPath: '/records'
+      preLoaderRoute: typeof AuthenticatedRecordsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/queue': {
+      id: '/_authenticated/queue'
+      path: '/queue'
+      fullPath: '/queue'
+      preLoaderRoute: typeof AuthenticatedQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/pharmacy': {
+      id: '/_authenticated/pharmacy'
+      path: '/pharmacy'
+      fullPath: '/pharmacy'
+      preLoaderRoute: typeof AuthenticatedPharmacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/outreach': {
+      id: '/_authenticated/outreach'
+      path: '/outreach'
+      fullPath: '/outreach'
+      preLoaderRoute: typeof AuthenticatedOutreachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/more': {
+      id: '/_authenticated/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof AuthenticatedMoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/mental': {
+      id: '/_authenticated/mental'
+      path: '/mental'
+      fullPath: '/mental'
+      preLoaderRoute: typeof AuthenticatedMentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/maternal': {
+      id: '/_authenticated/maternal'
+      path: '/maternal'
+      fullPath: '/maternal'
+      preLoaderRoute: typeof AuthenticatedMaternalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/insurance': {
+      id: '/_authenticated/insurance'
+      path: '/insurance'
+      fullPath: '/insurance'
+      preLoaderRoute: typeof AuthenticatedInsuranceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/incident': {
+      id: '/_authenticated/incident'
+      path: '/incident'
+      fullPath: '/incident'
+      preLoaderRoute: typeof AuthenticatedIncidentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/immunization': {
+      id: '/_authenticated/immunization'
+      path: '/immunization'
+      fullPath: '/immunization'
+      preLoaderRoute: typeof AuthenticatedImmunizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/hospitals': {
+      id: '/_authenticated/hospitals'
+      path: '/hospitals'
+      fullPath: '/hospitals'
+      preLoaderRoute: typeof AuthenticatedHospitalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/education': {
+      id: '/_authenticated/education'
+      path: '/education'
+      fullPath: '/education'
+      preLoaderRoute: typeof AuthenticatedEducationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/blood-donors': {
+      id: '/_authenticated/blood-donors'
+      path: '/blood-donors'
+      fullPath: '/blood-donors'
+      preLoaderRoute: typeof AuthenticatedBloodDonorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/blood-bank': {
+      id: '/_authenticated/blood-bank'
+      path: '/blood-bank'
+      fullPath: '/blood-bank'
+      preLoaderRoute: typeof AuthenticatedBloodBankRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/appointments': {
+      id: '/_authenticated/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AuthenticatedAppointmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ambulance': {
+      id: '/_authenticated/ambulance'
+      path: '/ambulance'
+      fullPath: '/ambulance'
+      preLoaderRoute: typeof AuthenticatedAmbulanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/doctors/$id': {
+      id: '/_authenticated/doctors/$id'
       path: '/doctors/$id'
       fullPath: '/doctors/$id'
-      preLoaderRoute: typeof DoctorsIdRouteImport
+      preLoaderRoute: typeof AuthenticatedDoctorsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -557,31 +563,31 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
-  AmbulanceRoute: AmbulanceRoute,
-  AppointmentsRoute: AppointmentsRoute,
-  BloodBankRoute: BloodBankRoute,
-  BloodDonorsRoute: BloodDonorsRoute,
-  EducationRoute: EducationRoute,
-  HomeRoute: HomeRoute,
-  HospitalsRoute: HospitalsRoute,
-  ImmunizationRoute: ImmunizationRoute,
-  IncidentRoute: IncidentRoute,
-  InsuranceRoute: InsuranceRoute,
-  MaternalRoute: MaternalRoute,
-  MentalRoute: MentalRoute,
-  MoreRoute: MoreRoute,
-  OutreachRoute: OutreachRoute,
-  PharmacyRoute: PharmacyRoute,
-  ProfileRoute: ProfileRoute,
-  QueueRoute: QueueRoute,
-  RecordsRoute: RecordsRoute,
-  SosRoute: SosRoute,
-  SpecialistsRoute: SpecialistsRoute,
-  SymptomCheckerRoute: SymptomCheckerRoute,
-  TelemedicineRoute: TelemedicineRoute,
-  TransportRoute: TransportRoute,
-  DoctorsIdRoute: DoctorsIdRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAmbulanceRoute: AuthenticatedAmbulanceRoute,
+  AuthenticatedAppointmentsRoute: AuthenticatedAppointmentsRoute,
+  AuthenticatedBloodBankRoute: AuthenticatedBloodBankRoute,
+  AuthenticatedBloodDonorsRoute: AuthenticatedBloodDonorsRoute,
+  AuthenticatedEducationRoute: AuthenticatedEducationRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedHospitalsRoute: AuthenticatedHospitalsRoute,
+  AuthenticatedImmunizationRoute: AuthenticatedImmunizationRoute,
+  AuthenticatedIncidentRoute: AuthenticatedIncidentRoute,
+  AuthenticatedInsuranceRoute: AuthenticatedInsuranceRoute,
+  AuthenticatedMaternalRoute: AuthenticatedMaternalRoute,
+  AuthenticatedMentalRoute: AuthenticatedMentalRoute,
+  AuthenticatedMoreRoute: AuthenticatedMoreRoute,
+  AuthenticatedOutreachRoute: AuthenticatedOutreachRoute,
+  AuthenticatedPharmacyRoute: AuthenticatedPharmacyRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedQueueRoute: AuthenticatedQueueRoute,
+  AuthenticatedRecordsRoute: AuthenticatedRecordsRoute,
+  AuthenticatedSosRoute: AuthenticatedSosRoute,
+  AuthenticatedSpecialistsRoute: AuthenticatedSpecialistsRoute,
+  AuthenticatedSymptomCheckerRoute: AuthenticatedSymptomCheckerRoute,
+  AuthenticatedTelemedicineRoute: AuthenticatedTelemedicineRoute,
+  AuthenticatedTransportRoute: AuthenticatedTransportRoute,
+  AuthenticatedDoctorsIdRoute: AuthenticatedDoctorsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
