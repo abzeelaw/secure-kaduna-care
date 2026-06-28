@@ -4,6 +4,7 @@ import { ChevronLeft, Search, Heart, Brain, Baby, Bone, Stethoscope, User, Star 
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { DEFAULT_DOCTORS } from "@/data/kare-content";
 
 export const Route = createFileRoute("/_authenticated/specialists")({
   head: () => ({ meta: [{ title: "Specialists — KARE" }] }),
@@ -24,12 +25,16 @@ const cats = [
 function Specialists() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string | null>(null);
-  const { data = [], isLoading } = useQuery({
+  const { data = DEFAULT_DOCTORS, isLoading } = useQuery({
     queryKey: ["doctors"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("doctors").select("*, hospital:hospitals(name)").order("rating", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
+      try {
+        const { data, error } = await supabase.from("doctors").select("*, hospital:hospitals(name)").order("rating", { ascending: false });
+        if (error) throw error;
+        return (data?.length ? data : DEFAULT_DOCTORS) as typeof DEFAULT_DOCTORS;
+      } catch {
+        return DEFAULT_DOCTORS;
+      }
     },
   });
 

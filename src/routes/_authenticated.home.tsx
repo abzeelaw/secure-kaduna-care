@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { PhoneShell, KareLogo } from "@/components/kare/PhoneShell";
 import {
   Search, Bell, Ambulance, Building2, Stethoscope, CalendarDays,
@@ -9,6 +10,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import ThemeToggle from "@/components/ThemeToggle";
+import VoiceControlButton from "@/components/VoiceControlButton";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({ meta: [{ title: "Home — KARE" }] }),
@@ -24,6 +27,27 @@ const quickActions = [
   { to: "/blood-donors", label: "Blood Donors", icon: Droplet, color: "bg-emergency-soft text-emergency" },
   { to: "/records", label: "Records", icon: Wallet, color: "bg-secondary text-info" },
   { to: "/telemedicine", label: "Telemedicine", icon: Video, color: "bg-accent text-accent-foreground" },
+];
+
+const bannerSlides = [
+  {
+    title: "24/7 emergency care",
+    body: "Get ambulances, hospitals and urgent support in seconds.",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80",
+    cta: { label: "Call emergency", to: "/sos" },
+  },
+  {
+    title: "Care that follows you",
+    body: "Track appointments, records and specialist care in one place.",
+    image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80",
+    cta: { label: "Open records", to: "/records" },
+  },
+  {
+    title: "Health support for every family",
+    body: "Maternal, child and mental health services all in one app.",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80",
+    cta: { label: "Explore services", to: "/more" },
+  },
 ];
 
 const moreModules = [
@@ -59,6 +83,29 @@ function Home() {
     },
   });
 
+  const [activeBanner, setActiveBanner] = useState(0);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveBanner((value) => (value + 1) % bannerSlides.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const filteredQuickActions = useMemo(() => {
+    if (!search.trim()) return quickActions;
+    const term = search.toLowerCase();
+    return quickActions.filter((action) => action.label.toLowerCase().includes(term));
+  }, [search]);
+
+  const filteredMoreModules = useMemo(() => {
+    if (!search.trim()) return moreModules;
+    const term = search.toLowerCase();
+    return moreModules.filter((module) => module.label.toLowerCase().includes(term));
+  }, [search]);
+
   const name = profile?.full_name?.split(" ")[0] ?? "there";
   const initials = (profile?.full_name ?? user?.email ?? "U").split(" ").map((s) => s[0]).slice(0, 2).join("").toUpperCase();
 
@@ -66,9 +113,13 @@ function Home() {
     <PhoneShell>
       <div className="px-5 pt-3 pb-2 flex items-center justify-between">
         <KareLogo className="text-lg" />
-        <Link to="/profile" aria-label="profile">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">{initials}</div>
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <VoiceControlButton />
+          <Link to="/profile" aria-label="profile">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">{initials}</div>
+          </Link>
+        </div>
       </div>
 
       <div className="px-5 pt-2">
@@ -79,8 +130,41 @@ function Home() {
       <div className="px-5 pt-4">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-4 py-3">
           <Search className="h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search doctor, hospital, service…" className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/70" />
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search doctor, hospital, service…" className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/70" />
           <Bell className="h-4 w-4 text-muted-foreground" />
+        </div>
+      </div>
+
+      <div className="px-5 pt-4">
+        <div className="relative overflow-hidden rounded-[28px] border border-border shadow-lg">
+          {bannerSlides.map((slide, index) => (
+            <div
+              key={slide.title}
+              className={`absolute inset-0 transition-opacity duration-700 ${index === activeBanner ? "opacity-100" : "opacity-0"}`}
+              style={{
+                backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url(${slide.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          ))}
+          <div className="relative flex min-h-44 flex-col justify-between p-4 text-white">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/75">KARE spotlight</p>
+              <h2 className="mt-2 text-xl font-semibold">{bannerSlides[activeBanner].title}</h2>
+              <p className="mt-1 max-w-xs text-sm text-white/85">{bannerSlides[activeBanner].body}</p>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <Link to={bannerSlides[activeBanner].cta.to as never} className="rounded-full bg-white/15 px-3 py-2 text-sm font-semibold backdrop-blur">
+                {bannerSlides[activeBanner].cta.label}
+              </Link>
+              <div className="flex gap-1.5">
+                {bannerSlides.map((slide, index) => (
+                  <button key={slide.title} onClick={() => setActiveBanner(index)} className={`h-2.5 rounded-full transition-all ${index === activeBanner ? "w-6 bg-white" : "w-2.5 bg-white/50"}`} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -114,7 +198,7 @@ function Home() {
 
       <h2 className="px-5 pt-6 pb-3 text-sm font-semibold">Quick Actions</h2>
       <div className="grid grid-cols-4 gap-2 px-5">
-        {quickActions.map((a) => {
+        {filteredQuickActions.length > 0 ? filteredQuickActions.map((a) => {
           const Icon = a.icon;
           return (
             <Link key={a.to} to={a.to as never} className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-background p-3">
@@ -124,7 +208,7 @@ function Home() {
               <span className="text-[10px] font-medium leading-tight text-center">{a.label}</span>
             </Link>
           );
-        })}
+        }) : <div className="col-span-4 rounded-2xl border border-dashed border-border bg-background/80 p-3 text-center text-sm text-muted-foreground">No services match your search yet.</div>}
       </div>
 
       <div className="flex items-center justify-between px-5 pt-6 pb-3">
@@ -151,8 +235,8 @@ function Home() {
       </div>
 
       <h2 className="px-5 pt-6 pb-3 text-sm font-semibold">All Services</h2>
-      <div className="grid grid-cols-3 gap-2 px-5">
-        {moreModules.map((m) => {
+      <div className="grid grid-cols-3 gap-2 px-5 pb-6">
+        {filteredMoreModules.length > 0 ? filteredMoreModules.map((m) => {
           const Icon = m.icon;
           return (
             <Link key={m.to} to={m.to as never} className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-background p-3 text-center">
@@ -160,7 +244,7 @@ function Home() {
               <span className="text-[10px] font-medium leading-tight">{m.label}</span>
             </Link>
           );
-        })}
+        }) : <div className="col-span-3 rounded-2xl border border-dashed border-border bg-background/80 p-3 text-center text-sm text-muted-foreground">Try a different service name.</div>}
       </div>
     </PhoneShell>
   );

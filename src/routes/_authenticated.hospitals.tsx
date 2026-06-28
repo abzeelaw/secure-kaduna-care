@@ -4,6 +4,7 @@ import { ChevronLeft, Search, Building2, Star, MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { DEFAULT_HOSPITALS } from "@/data/kare-content";
 
 export const Route = createFileRoute("/_authenticated/hospitals")({
   head: () => ({ meta: [{ title: "Hospitals — KARE" }] }),
@@ -15,12 +16,16 @@ const tabs = ["All", "Government", "Private", "Teaching", "Maternity"] as const;
 function Hospitals() {
   const [tab, setTab] = useState<typeof tabs[number]>("All");
   const [q, setQ] = useState("");
-  const { data = [], isLoading } = useQuery({
+  const { data = DEFAULT_HOSPITALS, isLoading } = useQuery({
     queryKey: ["hospitals"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("hospitals").select("*").order("rating", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
+      try {
+        const { data, error } = await supabase.from("hospitals").select("*").order("rating", { ascending: false });
+        if (error) throw error;
+        return (data?.length ? data : DEFAULT_HOSPITALS) as typeof DEFAULT_HOSPITALS;
+      } catch {
+        return DEFAULT_HOSPITALS;
+      }
     },
   });
 

@@ -1,37 +1,42 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
 import { Search, MapPin, Phone } from "lucide-react";
+import { useMemo, useState } from "react";
+import { DEFAULT_PHARMACIES } from "@/data/kare-content";
 
 export const Route = createFileRoute("/_authenticated/pharmacy")({
   head: () => ({ meta: [{ title: "Pharmacy Finder — KARE" }] }),
   component: PharmacyPage,
 });
 
-const pharmacies = [
-  { name: "HealthPlus Pharmacy", price: "₦500", dist: "300m away", stock: true },
-  { name: "MediCare Pharmacy", price: "₦650", dist: "1.2km away", stock: true },
-  { name: "CityCare Pharmacy", price: "₦480", dist: "2.1km away", stock: false },
-];
-
 function PharmacyPage() {
+  const [search, setSearch] = useState("Paracetamol 500mg");
+
+  const pharmacies = useMemo(() => {
+    const term = search.toLowerCase();
+    return DEFAULT_PHARMACIES.filter((item) =>
+      !term || item.name.toLowerCase().includes(term) || item.area.toLowerCase().includes(term) || item.distance.toLowerCase().includes(term)
+    );
+  }, [search]);
+
   return (
     <PhoneShell>
       <TopBar title="Drug & Pharmacy Finder" />
       <div className="px-5 pt-4">
         <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-3">
           <Search className="h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search medication..." defaultValue="Paracetamol 500mg" className="flex-1 bg-transparent text-sm outline-none" />
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search medication..." className="flex-1 bg-transparent text-sm outline-none" />
         </div>
         <p className="mt-4 text-sm font-semibold">Paracetamol 500mg</p>
         <p className="text-xs text-muted-foreground">Available in 3 pharmacies near you</p>
 
         <div className="mt-4 space-y-3">
           {pharmacies.map((p) => (
-            <div key={p.name} className="rounded-xl border border-border bg-card p-4">
+            <div key={p.id} className="rounded-xl border border-border bg-card p-4">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-semibold">{p.name}</p>
-                  <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" />{p.dist}</p>
+                  <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" />{p.distance} • {p.area}</p>
                 </div>
                 <p className="text-base font-bold text-primary">{p.price}</p>
               </div>

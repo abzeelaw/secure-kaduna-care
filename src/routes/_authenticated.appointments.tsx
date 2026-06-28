@@ -35,13 +35,8 @@ function Appts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("appointments")
-        .select("id,scheduled_at,status,reason, doctor:doctors(full_name,specialty), hospital:hospitals(name)")
-        .order("scheduled_at", { ascending: true });
-      if (error) throw error;
-      return (data ?? []) as unknown as AppointmentRow[];
-    },
-  });
-
+            .select("id,scheduled_at,status,reason, doctor:doctors(full_name,specialty), hospital:hospitals(name,address), consultation_fee")
+            .eq("user_id", user?.id)
   const cancel = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("appointments").update({ status: "cancelled" }).eq("id", id);
@@ -100,6 +95,8 @@ function Appts() {
                 </span>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">{a.hospital?.name ?? ""}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{a.hospital?.address ?? ""}</p>
+              <p className="mt-2 text-sm font-semibold">{a.consultation_fee ? `Consultation: ${a.consultation_fee}` : "Consultation fee not set"}</p>
               <div className="mt-2 flex items-center justify-between">
                 <p className="text-sm font-semibold">{when.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} • {when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
               </div>

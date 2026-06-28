@@ -49,8 +49,8 @@ function createSupabaseClient() {
     },
     auth: {
       storage: typeof window !== 'undefined' ? localStorage : undefined,
-      persistSession: true,
-      autoRefreshToken: true,
+      persistSession: false,
+      autoRefreshToken: false,
     }
   });
 }

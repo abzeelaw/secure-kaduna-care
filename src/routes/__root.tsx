@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { supabase } from "@/utils/supabase";
 
 function NotFoundComponent() {
   return (
@@ -103,9 +104,25 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Force sign-out on app start so users must explicitly sign in each visit
+  // (clears persisted sessions in the browser)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    (async () => {
+      try {
+        await supabase.auth.signOut();
+        // clear local storage session keys just in case
+        try { localStorage.removeItem('sb:token'); } catch {}
+      } catch (e) {
+        // ignore
+      }
+    })();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <div className="min-h-screen">
+        <Outlet />
+      </div>
     </QueryClientProvider>
   );
 }

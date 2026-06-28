@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { registerUser } from "./lib/register-user";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -37,9 +38,38 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
+async function handleApiRequest(request: Request): Promise<Response | null> {
+  const url = new URL(request.url);
+
+  if (url.pathname === '/api/register' && request.method === 'POST') {
+    try {
+      const body = await request.json();
+      const { email, password, full_name, phone } = body;
+      const result = await registerUser({ email, password, full_name, phone });
+      return new Response(JSON.stringify({ ok: true, user: result.user, profile: result.profile }), {
+        status: 201,
+        headers: { 'content-type': 'application/json' },
+      });
+    } catch (error) {
+      console.error('[server] /api/register error:', error);
+      const message = error instanceof Error ? error.message : String(error);
+      const status = /required|signup|disabled/i.test(message) ? 400 : 500;
+      return new Response(JSON.stringify({ error: message }), {
+        status,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+  }
+
+  return null;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const apiResponse = await handleApiRequest(request);
+      if (apiResponse) return apiResponse;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
