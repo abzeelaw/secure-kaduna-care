@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneShell, TopBar } from "@/components/kare/PhoneShell";
-import { FileText, Pill, FlaskConical, Syringe, AlertCircle, HeartPulse, Plus, X } from "lucide-react";
+import { FileText, Pill, FlaskConical, Syringe, AlertCircle, HeartPulse, Plus, X, Edit3, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,7 @@ function RecordsPage() {
   const [recordType, setRecordType] = useState("medication");
   const [title, setTitle] = useState("");
   const [provider, setProvider] = useState("");
+  const [editing, setEditing] = useState<any | null>(null);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user?.id],
@@ -57,12 +58,32 @@ function RecordsPage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
+  const update = useMutation({
+    mutationFn: async (payload: any) => {
+      const { id, record_type, title, provider } = payload;
+      if (!id) throw new Error("Missing id");
+      const { error } = await supabase.from("medical_records").update({ record_type, title, provider }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Record updated"); setEditing(null); qc.invalidateQueries({ queryKey: ["records"] }); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Update failed"),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("medical_records").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Record deleted"); qc.invalidateQueries({ queryKey: ["records"] }); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Delete failed"),
+  });
+
   const counts = types.map((t) => ({ ...t, count: records.filter((r) => r.record_type === t.key).length }));
   const fullName = profile?.full_name ?? user?.email ?? "Patient";
 
   return (
     <PhoneShell>
-      <TopBar title="Medical Records" right={<button onClick={() => setOpen(true)} className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button>} />
+      <TopBar title="Medical Records" right={<div className="flex items-center gap-2"><Link to="/family" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground">F</Link><button onClick={() => setOpen(true)} className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button></div>} />
       <div className="px-5 pt-5">
         <div className="rounded-2xl bg-gradient-to-br from-primary to-[oklch(0.55_0.12_184)] p-5 text-primary-foreground shadow-lg">
           <p className="text-xs opacity-80">Emergency Access Card</p>
@@ -93,11 +114,19 @@ function RecordsPage() {
         <div className="mt-2 space-y-2">
           {records.length === 0 && <p className="rounded-xl border border-dashed border-border py-6 text-center text-xs text-muted-foreground">No records yet — tap + to add one.</p>}
           {records.slice(0, 8).map((r) => (
-            <div key={r.id} className="rounded-xl border border-border bg-card p-3">
-              <p className="text-sm font-semibold">{r.title}</p>
-              <p className="text-xs text-muted-foreground capitalize">{r.record_type} • {new Date(r.record_date).toLocaleDateString()} {r.provider ? `• ${r.provider}` : ""}</p>
-            </div>
-          ))}
+              <div key={r.id} className="rounded-xl border border-border bg-card p-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">{r.title}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{r.record_type} • {new Date(r.record_date).toLocaleDateString()} {r.provider ? `• ${r.provider}` : ""}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => { setEditing(r); setOpen(true); setRecordType(r.record_type); setTitle(r.title); setProvider(r.provider ?? ""); }} className="p-2"><Edit3 className="h-4 w-4 text-muted-foreground" /></button>
+                    <button onClick={() => remove.mutate(r.id)} className="p-2"><Trash2 className="h-4 w-4 text-emergency" /></button>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
 
@@ -119,8 +148,14 @@ function RecordsPage() {
             <label className="mt-3 flex flex-col gap-1.5 text-xs font-medium text-muted-foreground">Provider / Hospital
               <input value={provider} onChange={(e) => setProvider(e.target.value)} placeholder="optional" className="rounded-xl border border-input bg-background px-3 py-2.5 text-sm" />
             </label>
-            <button onClick={() => add.mutate()} disabled={add.isPending} className="mt-5 w-full rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60">
-              {add.isPending ? "Saving…" : "Save record"}
+            <button onClick={() => {
+              if (editing) {
+                update.mutate({ id: editing.id, record_type: recordType, title: title.trim(), provider: provider.trim() || null });
+              } else {
+                add.mutate();
+              }
+            }} disabled={add.isPending || update.isPending} className="mt-5 w-full rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60">
+              {add.isPending || update.isPending ? "Saving…" : editing ? "Update record" : "Save record"}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KareLogo } from "@/components/kare/PhoneShell";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "../utils/supabase";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
@@ -26,6 +26,23 @@ function Auth() {
   const [busy, setBusy] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    async function checkSession() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        navigate({
+          to: "/home",
+          replace: true,
+        });
+      }
+    }
+
+    checkSession();
+  }, [navigate]);
+
   function isEmailConfirmationError(message: string) {
     return /email.*confirm|confirm.*email|email_not_confirmed|user.*not.*confirmed|not.*confirmed/i.test(message);
   }
@@ -49,7 +66,31 @@ function Auth() {
   }
 
   function validatePassword(value: string) {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(value);
+    return value.length >= 8;
+  }
+
+  async function ensureProfileExists(user: any) {
+    try {
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (!existing) {
+        await supabase.from('profiles').insert([
+          {
+            id: user.id,
+            full_name: user.user_metadata?.full_name ?? null,
+            phone: user.user_metadata?.phone ?? null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ]);
+      }
+    } catch (profileError) {
+      console.warn('[auth] ensureProfileExists error:', profileError);
+    }
   }
 
   async function submit(e: React.FormEvent) {
@@ -77,6 +118,8 @@ function Auth() {
           throw error;
         }
 
+        await ensureProfileExists(data.user);
+
         toast.success("Welcome back!");
 
         navigate({
@@ -85,42 +128,28 @@ function Auth() {
         });
       } else {
         if (!validatePassword(password)) {
-          setStatusMessage(
-            "Use at least 8 characters with uppercase, lowercase, a number, and a symbol."
-          );
-          toast.error("Please choose a stronger password.");
+          setStatusMessage("Use at least 8 characters.");
+          toast.error("Please choose a password with at least 8 characters.");
           return;
         }
 
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: name,
-              phone,
-            },
-          },
+        // Call server endpoint that creates the user via the Supabase admin key.
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email, password, full_name: name, phone }),
         });
 
-        if (error) throw error;
+        const payload = await res.json();
 
-        if (data.session) {
-          toast.success("Account created successfully!");
-          navigate({
-            to: "/home",
-            replace: true,
-          });
-          return;
+        if (!res.ok) {
+          throw new Error(payload?.error || 'Registration failed');
         }
 
-        setTab("login");
-        setStatusMessage(
-          "Your account was created. It looks like this Supabase project requires email confirmation, so please verify your email before signing in."
-        );
-        toast.success(
-          "Account created. Verify your email before signing in."
-        );
+        // Do NOT auto-login. Require the user to sign in with the credentials they used.
+        setTab('login');
+        setStatusMessage('Account created. Please sign in with the credentials you registered.');
+        toast.success('Account created. Please sign in.');
         return;
       }
     } catch (err) {
@@ -148,7 +177,7 @@ function Auth() {
 
   return (
     <div className="min-h-screen w-full bg-surface">
-      <div className="mx-auto flex min-h-screen max-w-110 flex-col bg-background px-6 pt-10">
+      <div className="mx-auto flex min-h-screen max-w-[440px] flex-col bg-background px-6 pt-10">
 
         <KareLogo className="text-2xl" />
 
@@ -162,10 +191,6 @@ function Auth() {
           {tab === "login"
             ? "Sign in to continue."
             : "Join KARE today."}
-        </p>
-
-        <p className="mt-3 text-xs text-muted-foreground">
-          Each time the app is reopened, you will need to sign in again for a fresh session.
         </p>
 
         <div className="mt-6 grid grid-cols-2 rounded-full bg-muted p-1">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Mic, MicOff } from "lucide-react";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 declare global {
   interface Window {
@@ -25,6 +26,7 @@ type SpeechRecognitionLike = {
 export default function VoiceControlButton() {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
     return () => {
@@ -55,6 +57,12 @@ export default function VoiceControlButton() {
       return;
     }
 
+    if (includesAny(command, ["queue", "wait list", "hospital queue", "digital queue"])) {
+      navigate({ to: "/queue" });
+      toast.success("Opened hospital queue");
+      return;
+    }
+
     if (includesAny(command, ["doctor", "specialist", "likita", "likitoci", "dókítà", "dokita", "dọkịta"])) {
       navigate({ to: "/specialists" });
       toast.success("Opened specialists");
@@ -70,6 +78,12 @@ export default function VoiceControlButton() {
     if (includesAny(command, ["pharmacy", "drug", "magani", "elegbogi", "ogwọ", "ogwu"])) {
       navigate({ to: "/pharmacy" });
       toast.success("Opened pharmacy finder");
+      return;
+    }
+
+    if (includesAny(command, ["records", "health records", "medical records", "my records"])) {
+      navigate({ to: "/records" });
+      toast.success("Opened records");
       return;
     }
 
@@ -97,6 +111,21 @@ export default function VoiceControlButton() {
       return;
     }
 
+    if (includesAny(command, ["turn off voice", "stop voice", "disable voice", "close voice control"])) {
+      stopRecognition();
+      toast.success("Voice control turned off");
+      return;
+    }
+
+    if (includesAny(command, ["search", "find", "look up"])) {
+      const target = command.replace(/.*?(search|find|look up)\s*/, "");
+      if (target.length > 0) {
+        navigate({ to: "/home" });
+        toast.success(`Searching for ${target}`);
+      }
+      return;
+    }
+
     toast.message(`Voice command: ${command}`);
   }
 
@@ -113,7 +142,7 @@ export default function VoiceControlButton() {
     }
 
     if (listening) {
-      setListening(false);
+      stopRecognition();
       return;
     }
 
@@ -122,12 +151,20 @@ export default function VoiceControlButton() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    recognitionRef.current = recognition;
+
     recognition.onstart = () => setListening(true);
     recognition.onerror = () => {
       setListening(false);
       toast.error("Voice control stopped unexpectedly.");
     };
-    recognition.onend = () => setListening(false);
+    recognition.onend = () => {
+      if (recognitionRef.current && listening) {
+        recognitionRef.current.start();
+      } else {
+        setListening(false);
+      }
+    };
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results)
         .map((result) => result[0]?.transcript ?? "")
@@ -136,6 +173,16 @@ export default function VoiceControlButton() {
     };
 
     recognition.start();
+  }
+
+  function stopRecognition() {
+    const current = recognitionRef.current;
+    if (current) {
+      current.onend = null;
+      current.stop();
+      recognitionRef.current = null;
+    }
+    setListening(false);
   }
 
   return (

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/sos")({
   head: () => ({ meta: [{ title: "SOS Emergency — KARE" }] }),
@@ -27,6 +28,25 @@ function SOS() {
   const [busy, setBusy] = useState(false);
   const [address, setAddress] = useState("Barnawa, Kaduna");
 
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user?.id],
+    enabled: !!user,
+    queryFn: async () => (await supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle()).data,
+  });
+
+  const { data: records = [] } = useQuery({
+    queryKey: ["records", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      try {
+        const { data } = await supabase.from("medical_records").select("*").eq("user_id", user?.id).order("record_date", { ascending: false });
+        return data ?? [];
+      } catch {
+        return [];
+      }
+    },
+  });
+
   async function send() {
     if (!user) return;
     setBusy(true);
@@ -39,11 +59,15 @@ function SOS() {
         lat = pos.coords.latitude; lng = pos.coords.longitude;
       } catch { /* ignore */ }
 
+      const patientSnapshot = JSON.stringify({ profile, records });
       const { error } = await supabase.from("sos_incidents").insert({
         user_id: user.id,
         category: selected.key,
-        lat, lng, address,
+        lat,
+        lng,
+        address,
         notes: `${selected.label} alert`,
+        patient_snapshot: patientSnapshot,
       });
       if (error) throw error;
       toast.success("Emergency alert sent — responders notified");

@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import ThemeToggle from "@/components/ThemeToggle";
 import VoiceControlButton from "@/components/VoiceControlButton";
+import { DEFAULT_DOCTORS } from "@/data/kare-content";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({ meta: [{ title: "Home — KARE" }] }),
@@ -106,6 +107,38 @@ function Home() {
     return moreModules.filter((module) => module.label.toLowerCase().includes(term));
   }, [search]);
 
+  const searchResults = useMemo(() => {
+    if (!search.trim()) return [];
+    const term = search.toLowerCase();
+    const results = [] as Array<{ label: string; to: string; description: string }>;
+
+    quickActions.forEach((action) => {
+      if (action.label.toLowerCase().includes(term)) {
+        results.push({ label: action.label, to: action.to, description: "Quick action" });
+      }
+    });
+
+    moreModules.forEach((module) => {
+      if (module.label.toLowerCase().includes(term)) {
+        results.push({ label: module.label, to: module.to, description: "Service" });
+      }
+    });
+
+    hospitals.forEach((hospital) => {
+      if (hospital.name.toLowerCase().includes(term) || (hospital.type ?? "").toLowerCase().includes(term) || (hospital.address ?? "").toLowerCase().includes(term)) {
+        results.push({ label: hospital.name, to: `/hospitals/${hospital.id}`, description: "Hospital" });
+      }
+    });
+
+    DEFAULT_DOCTORS.forEach((doctor) => {
+      if (doctor.full_name.toLowerCase().includes(term) || doctor.specialty.toLowerCase().includes(term) || doctor.hospital.name.toLowerCase().includes(term)) {
+        results.push({ label: doctor.full_name, to: `/doctors/${doctor.id}`, description: doctor.specialty });
+      }
+    });
+
+    return results;
+  }, [search, hospitals]);
+
   const name = profile?.full_name?.split(" ")[0] ?? "there";
   const initials = (profile?.full_name ?? user?.email ?? "U").split(" ").map((s) => s[0]).slice(0, 2).join("").toUpperCase();
 
@@ -133,6 +166,22 @@ function Home() {
           <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search doctor, hospital, service…" className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/70" />
           <Bell className="h-4 w-4 text-muted-foreground" />
         </div>
+        {search.trim() && (
+          <div className="mt-3 rounded-2xl border border-border bg-background p-3">
+            {searchResults.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No matches found. Try a different clinic, specialist, or service.</p>
+            ) : (
+              <div className="space-y-2">
+                {searchResults.map((result) => (
+                  <Link key={`${result.to}-${result.label}`} to={result.to as never} className="block rounded-2xl border border-border p-3 hover:border-primary hover:bg-primary/5">
+                    <p className="text-sm font-semibold">{result.label}</p>
+                    <p className="text-xs text-muted-foreground">{result.description}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="px-5 pt-4">

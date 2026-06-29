@@ -31,12 +31,14 @@ import { Route as AuthenticatedIncidentRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedImmunizationRouteImport } from './routes/_authenticated.immunization'
 import { Route as AuthenticatedHospitalsRouteImport } from './routes/_authenticated.hospitals'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated.home'
+import { Route as AuthenticatedFamilyRouteImport } from './routes/_authenticated.family'
 import { Route as AuthenticatedEducationRouteImport } from './routes/_authenticated.education'
 import { Route as AuthenticatedBloodDonorsRouteImport } from './routes/_authenticated.blood-donors'
 import { Route as AuthenticatedBloodBankRouteImport } from './routes/_authenticated.blood-bank'
 import { Route as AuthenticatedAppointmentsRouteImport } from './routes/_authenticated.appointments'
 import { Route as AuthenticatedAmbulanceRouteImport } from './routes/_authenticated.ambulance'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
+import { Route as AuthenticatedHospitalsIdRouteImport } from './routes/_authenticated.hospitals.$id'
 import { Route as AuthenticatedDoctorsIdRouteImport } from './routes/_authenticated.doctors.$id'
 
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -152,6 +154,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFamilyRoute = AuthenticatedFamilyRouteImport.update({
+  id: '/family',
+  path: '/family',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEducationRoute = AuthenticatedEducationRouteImport.update({
   id: '/education',
   path: '/education',
@@ -184,6 +191,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedHospitalsIdRoute =
+  AuthenticatedHospitalsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedHospitalsRoute,
+  } as any)
 const AuthenticatedDoctorsIdRoute = AuthenticatedDoctorsIdRouteImport.update({
   id: '/doctors/$id',
   path: '/doctors/$id',
@@ -200,8 +213,9 @@ export interface FileRoutesByFullPath {
   '/blood-bank': typeof AuthenticatedBloodBankRoute
   '/blood-donors': typeof AuthenticatedBloodDonorsRoute
   '/education': typeof AuthenticatedEducationRoute
+  '/family': typeof AuthenticatedFamilyRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/hospitals': typeof AuthenticatedHospitalsRoute
+  '/hospitals': typeof AuthenticatedHospitalsRouteWithChildren
   '/immunization': typeof AuthenticatedImmunizationRoute
   '/incident': typeof AuthenticatedIncidentRoute
   '/insurance': typeof AuthenticatedInsuranceRoute
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/telemedicine': typeof AuthenticatedTelemedicineRoute
   '/transport': typeof AuthenticatedTransportRoute
   '/doctors/$id': typeof AuthenticatedDoctorsIdRoute
+  '/hospitals/$id': typeof AuthenticatedHospitalsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -230,8 +245,9 @@ export interface FileRoutesByTo {
   '/blood-bank': typeof AuthenticatedBloodBankRoute
   '/blood-donors': typeof AuthenticatedBloodDonorsRoute
   '/education': typeof AuthenticatedEducationRoute
+  '/family': typeof AuthenticatedFamilyRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/hospitals': typeof AuthenticatedHospitalsRoute
+  '/hospitals': typeof AuthenticatedHospitalsRouteWithChildren
   '/immunization': typeof AuthenticatedImmunizationRoute
   '/incident': typeof AuthenticatedIncidentRoute
   '/insurance': typeof AuthenticatedInsuranceRoute
@@ -249,6 +265,7 @@ export interface FileRoutesByTo {
   '/telemedicine': typeof AuthenticatedTelemedicineRoute
   '/transport': typeof AuthenticatedTransportRoute
   '/doctors/$id': typeof AuthenticatedDoctorsIdRoute
+  '/hospitals/$id': typeof AuthenticatedHospitalsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -262,8 +279,9 @@ export interface FileRoutesById {
   '/_authenticated/blood-bank': typeof AuthenticatedBloodBankRoute
   '/_authenticated/blood-donors': typeof AuthenticatedBloodDonorsRoute
   '/_authenticated/education': typeof AuthenticatedEducationRoute
+  '/_authenticated/family': typeof AuthenticatedFamilyRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
-  '/_authenticated/hospitals': typeof AuthenticatedHospitalsRoute
+  '/_authenticated/hospitals': typeof AuthenticatedHospitalsRouteWithChildren
   '/_authenticated/immunization': typeof AuthenticatedImmunizationRoute
   '/_authenticated/incident': typeof AuthenticatedIncidentRoute
   '/_authenticated/insurance': typeof AuthenticatedInsuranceRoute
@@ -281,6 +299,7 @@ export interface FileRoutesById {
   '/_authenticated/telemedicine': typeof AuthenticatedTelemedicineRoute
   '/_authenticated/transport': typeof AuthenticatedTransportRoute
   '/_authenticated/doctors/$id': typeof AuthenticatedDoctorsIdRoute
+  '/_authenticated/hospitals/$id': typeof AuthenticatedHospitalsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -294,6 +313,7 @@ export interface FileRouteTypes {
     | '/blood-bank'
     | '/blood-donors'
     | '/education'
+    | '/family'
     | '/home'
     | '/hospitals'
     | '/immunization'
@@ -313,6 +333,7 @@ export interface FileRouteTypes {
     | '/telemedicine'
     | '/transport'
     | '/doctors/$id'
+    | '/hospitals/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -324,6 +345,7 @@ export interface FileRouteTypes {
     | '/blood-bank'
     | '/blood-donors'
     | '/education'
+    | '/family'
     | '/home'
     | '/hospitals'
     | '/immunization'
@@ -343,6 +365,7 @@ export interface FileRouteTypes {
     | '/telemedicine'
     | '/transport'
     | '/doctors/$id'
+    | '/hospitals/$id'
   id:
     | '__root__'
     | '/'
@@ -355,6 +378,7 @@ export interface FileRouteTypes {
     | '/_authenticated/blood-bank'
     | '/_authenticated/blood-donors'
     | '/_authenticated/education'
+    | '/_authenticated/family'
     | '/_authenticated/home'
     | '/_authenticated/hospitals'
     | '/_authenticated/immunization'
@@ -374,6 +398,7 @@ export interface FileRouteTypes {
     | '/_authenticated/telemedicine'
     | '/_authenticated/transport'
     | '/_authenticated/doctors/$id'
+    | '/_authenticated/hospitals/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -539,6 +564,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/family': {
+      id: '/_authenticated/family'
+      path: '/family'
+      fullPath: '/family'
+      preLoaderRoute: typeof AuthenticatedFamilyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/education': {
       id: '/_authenticated/education'
       path: '/education'
@@ -581,6 +613,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/hospitals/$id': {
+      id: '/_authenticated/hospitals/$id'
+      path: '/$id'
+      fullPath: '/hospitals/$id'
+      preLoaderRoute: typeof AuthenticatedHospitalsIdRouteImport
+      parentRoute: typeof AuthenticatedHospitalsRoute
+    }
     '/_authenticated/doctors/$id': {
       id: '/_authenticated/doctors/$id'
       path: '/doctors/$id'
@@ -591,6 +630,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedHospitalsRouteChildren {
+  AuthenticatedHospitalsIdRoute: typeof AuthenticatedHospitalsIdRoute
+}
+
+const AuthenticatedHospitalsRouteChildren: AuthenticatedHospitalsRouteChildren =
+  {
+    AuthenticatedHospitalsIdRoute: AuthenticatedHospitalsIdRoute,
+  }
+
+const AuthenticatedHospitalsRouteWithChildren =
+  AuthenticatedHospitalsRoute._addFileChildren(
+    AuthenticatedHospitalsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAmbulanceRoute: typeof AuthenticatedAmbulanceRoute
@@ -598,8 +651,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBloodBankRoute: typeof AuthenticatedBloodBankRoute
   AuthenticatedBloodDonorsRoute: typeof AuthenticatedBloodDonorsRoute
   AuthenticatedEducationRoute: typeof AuthenticatedEducationRoute
+  AuthenticatedFamilyRoute: typeof AuthenticatedFamilyRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
-  AuthenticatedHospitalsRoute: typeof AuthenticatedHospitalsRoute
+  AuthenticatedHospitalsRoute: typeof AuthenticatedHospitalsRouteWithChildren
   AuthenticatedImmunizationRoute: typeof AuthenticatedImmunizationRoute
   AuthenticatedIncidentRoute: typeof AuthenticatedIncidentRoute
   AuthenticatedInsuranceRoute: typeof AuthenticatedInsuranceRoute
@@ -626,8 +680,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBloodBankRoute: AuthenticatedBloodBankRoute,
   AuthenticatedBloodDonorsRoute: AuthenticatedBloodDonorsRoute,
   AuthenticatedEducationRoute: AuthenticatedEducationRoute,
+  AuthenticatedFamilyRoute: AuthenticatedFamilyRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
-  AuthenticatedHospitalsRoute: AuthenticatedHospitalsRoute,
+  AuthenticatedHospitalsRoute: AuthenticatedHospitalsRouteWithChildren,
   AuthenticatedImmunizationRoute: AuthenticatedImmunizationRoute,
   AuthenticatedIncidentRoute: AuthenticatedIncidentRoute,
   AuthenticatedInsuranceRoute: AuthenticatedInsuranceRoute,

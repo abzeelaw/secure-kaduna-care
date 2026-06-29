@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import ThemeToggle from "@/components/ThemeToggle";
 import { supabase } from "@/utils/supabase";
 
 function NotFoundComponent() {
@@ -121,6 +122,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen">
+        <div className="p-4 flex justify-end">
+          <ThemeToggle />
+        </div>
         <Outlet />
       </div>
     </QueryClientProvider>

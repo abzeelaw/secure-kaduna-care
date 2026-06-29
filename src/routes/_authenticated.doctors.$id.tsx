@@ -4,7 +4,7 @@ import { ChevronLeft, Star, Building2, Award, Clock, MapPin } from "lucide-react
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { DEFAULT_DOCTORS, DEFAULT_HOSPITALS } from "@/data/kare-content";
 
@@ -18,6 +18,8 @@ function Doctor() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedHour, setSelectedHour] = useState<number | null>(null);
 
   const qc = useQueryClient();
 
@@ -45,6 +47,50 @@ function Doctor() {
       const when = new Date();
       when.setDate(when.getDate() + 1);
       when.setHours(slotHours, 0, 0, 0);
+      const insertData: Record<string, unknown> = {
+        user_id: user.id,
+        doctor_id: doctor.id,
+        scheduled_at: when.toISOString(),
+        reason: `Consultation with ${doctor.full_name}`,
+      };
+      if (hospital?.id) insertData.hospital_id = hospital.id;
+      const { error } = await supabase.from("appointments").insert(insertData);
+      if (error) throw error;
+      toast.success("Appointment booked");
+      qc.invalidateQueries({ queryKey: ["appointments"] });
+      navigate({ to: "/appointments" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Booking failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const availableWeekdays = useMemo(() => {
+    return doctor.weekly_schedule.map((slot) => slot.split(" ")[0].toLowerCase());
+  }, [doctor.weekly_schedule]);
+
+  const nextMonthDates = useMemo(() => {
+    const today = new Date();
+    const dates = [] as { date: Date; available: boolean }[];
+    for (let offset = 0; offset < 30; offset += 1) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + offset);
+      const dayName = date.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
+      const available = availableWeekdays.includes(dayName);
+      dates.push({ date, available });
+    }
+    return dates;
+  }, [availableWeekdays]);
+
+  const availableHours = [9, 11, 14, 16];
+
+  async function bookSelected() {
+    if (!user || !doctor || !selectedDate || selectedHour == null) return;
+    setBusy(true);
+    try {
+      const when = new Date(selectedDate);
+      when.setHours(selectedHour, 0, 0, 0);
       const insertData: Record<string, unknown> = {
         user_id: user.id,
         doctor_id: doctor.id,
@@ -127,13 +173,72 @@ function Doctor() {
         </div>
       </div>
 
-      <h3 className="px-5 pt-6 pb-2 text-sm font-semibold">Pick a slot — tomorrow</h3>
-      <div className="grid grid-cols-3 gap-2 px-5">
-        {[9, 11, 14, 16].map((h) => (
-          <button key={h} disabled={busy} onClick={() => book(h)} className="rounded-2xl border border-primary bg-primary-soft py-3 text-sm font-semibold text-primary disabled:opacity-60">
-            {h}:00
-          </button>
-        ))}
+      <div className="px-5 pt-6">
+        <h3 className="text-sm font-semibold">Pick a slot</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Choose a quick slot or select a day from the calendar.</p>
+      </div>
+
+      <div className="px-5 pt-4">
+        <div className="rounded-2xl border border-border bg-background p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Option 1: Quick slot</p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {[9, 11, 14, 16].map((h) => (
+              <button key={h} disabled={busy} onClick={() => book(h)} className="rounded-2xl border border-primary bg-primary-soft py-3 text-sm font-semibold text-primary disabled:opacity-60">
+                {h}:00
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-border bg-background p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Option 2: Calendar</p>
+          <div className="mt-3 grid grid-cols-7 gap-2">
+            {nextMonthDates.slice(0, 14).map(({ date, available }) => (
+              <button
+                key={date.toDateString()}
+                disabled={!available || busy}
+                onClick={() => {
+                  setSelectedDate(date);
+                  setSelectedHour(null);
+                }}
+                className={`rounded-xl border p-2 text-sm ${
+                  selectedDate && date.toDateString() === selectedDate.toDateString()
+                    ? "border-primary bg-primary-soft text-primary"
+                    : "border-border bg-background"
+                } ${available ? "" : "opacity-40"}`}
+              >
+                <div className="text-[10px]">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                <div className="mt-1 font-semibold">{date.getDate()}</div>
+              </button>
+            ))}
+          </div>
+
+          {selectedDate && (
+            <div className="mt-4">
+              <p className="text-sm font-semibold">Available times</p>
+              <div className="mt-2 grid grid-cols-4 gap-2">
+                {availableHours.map((hour) => (
+                  <button
+                    key={hour}
+                    onClick={() => setSelectedHour(hour)}
+                    className={`rounded-xl border px-2 py-2 text-sm ${selectedHour === hour ? "border-primary bg-primary-soft text-primary" : "border-border bg-background"}`}
+                  >
+                    {hour}:00
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  void bookSelected();
+                }}
+                disabled={busy || selectedHour == null}
+                className="mt-4 w-full rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+              >
+                {busy ? "Booking…" : "Book selected slot"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </PhoneShell>
   );
